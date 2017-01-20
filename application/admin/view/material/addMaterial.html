@@ -1,0 +1,226 @@
+{include file='common/head' /}
+<body>
+	<div class="container-fluid">
+		
+		<div class="form-list">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="bs-callout bs-callout-danger">
+						<h4 class="">{$title}</h4>
+						<p>原料用于制作菜肴，包括蔬菜瓜果类，调味品等</p>
+					</div>
+					<form action="{:url('insertMaterial')}" method="POST" id="addMaterial" class="form-horizontal" role="from">
+						<!-- 原材料名称 -->
+						<div class="form-group">
+							<!-- col-xs-* ：手机、col-sm-* ：平板、col-md-* ：桌面 -->
+							<label for="materialName" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">名称：</label>
+							<div class="col-xs-12 col-sm-10 col-md-11">
+								<input type="text" class="form-control" id="materialName" placeholder="原料名称" name="name">
+							</div>
+						</div>
+						<!-- 原材料价格 -->
+						<div class="form-group">
+							<label for="materialPrice" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">价格：</label>
+							<div class="col-xs-12 col-sm-10 col-md-11">
+								<input type="text" class="form-control" id="materialPrice" placeholder="市场价格" name="price">
+							</div>
+						</div>
+						<!-- 原材料单位 -->
+						<div class="form-group">
+							<label for="materialUnit" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">单位：</label>
+							<div class="col-xs-12 col-sm-10 col-md-11">
+								<input type="text" class="form-control" id="materialUnit" placeholder="原料单位" name="unit">
+							</div>
+						</div>
+						<!-- 原材料库存 -->
+						<div class="form-group">
+							<label for="materialInventory" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">库存：</label>
+							<div class="col-xs-12 col-sm-10 col-md-11">
+								<input type="text" class="form-control" id="materialInventory" placeholder="库存数量" name="inventory">
+							</div>
+						</div>
+						<!-- 原材料分类 -->
+						<div class="form-group">
+							<label for="materialType" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">类别：</label>
+							<div class="col-xs-12 col-sm-10 col-md-11">
+								<input type="hidden" id="materialType" name="type" value="0">
+								<select class="form-control" id="materialTypeSelect" onchange="selectChange();">
+									<option value="0">请选择分类</option>
+									{volist name = 'typeList' id = 'typeList'}
+									<option id="{$typeList.id}" value="{$typeList.id}">{$typeList.name}</option>
+									{/volist}
+								</select>
+							</div>
+						</div>
+						<!-- 原材料生产商 -->
+						<div class="form-group">
+							<label for="materialProducer" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">厂商：</label>
+							<div class="col-xs-12 col-sm-10 col-md-11">
+								<input type="text" class="form-control" id="materialProducer" placeholder="生产商" name="producer">
+							</div>
+						</div>
+						<!-- 保存按钮 -->
+						<div class="form-group">
+							<div class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-1 col-md-11">
+								<button type="submit" class="btn btn-primary btn-sm">保存</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$(function () {
+			
+			$('#addMaterial').ajaxForm({
+				beforeSubmit: checkFormAdd,
+				success: completeAdd,
+				dataType: 'json'
+			});
+
+			function checkFormAdd() {
+
+				// 验证原料名称是否为空
+				if ($('#materialName').val() == '') {
+
+					layer.alert('名称不能为空！', {icon: 2}, function (param) {
+						layer.close(param);
+
+						$('#materialName').focus();
+					});
+
+					return false;
+				}
+
+				// 验证原料价格是否为空
+				if ($('#materialPrice').val() == '') {
+
+					layer.alert('价格不能为空！', {icon: 2}, function (param) {
+						layer.close(param);
+
+						$('#materialPrice').focus();
+					});
+
+					return false;
+				}
+
+				// 验证价格是否为正确数字
+				if (isNaN($('#materialPrice').val())) {
+
+					layer.alert('请输入正确的数字！【价格】', {icon: 2}, function (param) {
+						layer.close(param);
+
+						$('#materialPrice').focus();
+					});
+
+					return false;
+				}
+
+				// 验证单位是否为空
+				if ($('#materialUnit').val() == '') {
+
+					layer.alert('单位不能为空！', {icon: 2}, function (param) {
+
+						layer.close(param);
+
+						$('#materialUnit').focus();
+					});
+
+					return false;
+				}
+
+				// 验证库存是否为空
+				if ($('#materialInventory').val() == '') {
+
+					layer.alert('库存不能为空！', {icon: 2}, function (param) {
+						layer.close(param);
+
+						$('#materialInventory').focus();
+					});
+
+					return false;
+				}
+
+				// 验证库存是否为正确数字
+				if (isNaN($('#materialInventory').val())) {
+
+					layer.alert('请输入正确的数字！【库存】', {icon: 2}, function (param) {
+						layer.close(param);
+
+						$('#materialInventory').focus();
+					});
+
+					return false;
+				}
+
+				var materialType = $('#materialType').val();
+
+				console.log(materialType);
+				// 验证分类是否选择正确
+				if (materialType == '') {
+
+					layer.alert('验证分类选择有误！', {icon: 2}, function (param) {
+						
+						layer.close(param);
+
+					});
+
+					return false;
+				}
+
+				if (materialType == 0) {
+
+					layer.alert('验证分类选择有误！', {icon: 2}, function (param) {
+						
+						layer.close(param);
+
+					});
+
+					return false;
+				}
+
+				// 验证生产厂商是否为空
+				if ($('#materialProducer').val() == '') {
+
+					layer.alert('生产商不能为空！', {icon: 2}, function (param) {
+						layer.close(param);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+						$('#materialProducer').focus();
+					});
+
+					return false;
+				}
+
+				console.log('前端验证结束');
+			}
+
+			function completeAdd(data) {
+
+				if (data.status == 1) {
+
+					layer.msg(data.info, {icon: 1, time: 2000}, function (param) {
+						
+						layer.close(param);
+
+					});
+
+				}
+				
+			}
+
+
+		});
+
+		function selectChange() {
+				
+			var objSelect = $('#materialTypeSelect');
+
+			// $('#materialType').val(objSelect.val());
+			$('#materialType').val(objSelect.find("option:selected").text());
+
+		}
+	</script>
+</body>
+</html>
