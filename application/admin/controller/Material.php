@@ -49,10 +49,6 @@ class Material extends Controller
 	{
 		$materialModel = new MaterialModel;
 
-		echo input('post.price');
-
-		// var_dump(input('post.'));die();
-
 		if (false !== $materialModel->save(input('post.'))) {
 			
 			$result = ['info' => '添加成功！', 'status' => '1', 'url' => url('addMaterial')];
@@ -234,7 +230,9 @@ class Material extends Controller
 
 		$searchName = input('post.searchName');
 
-		if (isset($searchName)) {
+		// var_dump($searchName !== '');
+
+		if ($searchName !== '') {
 
 			$typeList = MaterialTypeModel::all(['is_del' => 0]);
 

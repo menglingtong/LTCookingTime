@@ -1,75 +1,205 @@
 {include file='common/head' /}
-<body>
-	<div class="container-fluid">
-		
-		<div class="form-list">
-			<div class="row">
-				<div class="col-md-12">
-					<div class="bs-callout bs-callout-danger">
-						<h4 class="">{$title}</h4>
-						<p>原料用于制作菜肴，包括蔬菜瓜果类，调味品等</p>
-					</div>
-					<form action="{:url('insertMaterial')}" method="POST" id="addMaterial" class="form-horizontal" role="from">
-						<!-- 原材料名称 -->
-						<div class="form-group">
-							<!-- col-xs-* ：手机、col-sm-* ：平板、col-md-* ：桌面 -->
-							<label for="materialName" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">名称：</label>
-							<div class="col-xs-12 col-sm-10 col-md-11">
-								<input type="text" class="form-control" id="materialName" placeholder="原料名称" name="name">
-							</div>
-						</div>
-						<!-- 原材料价格 -->
-						<div class="form-group">
-							<label for="materialPrice" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">价格：</label>
-							<div class="col-xs-12 col-sm-10 col-md-11">
-								<input type="text" class="form-control" id="materialPrice" placeholder="市场价格" name="price">
-							</div>
-						</div>
-						<!-- 原材料单位 -->
-						<div class="form-group">
-							<label for="materialUnit" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">单位：</label>
-							<div class="col-xs-12 col-sm-10 col-md-11">
-								<input type="text" class="form-control" id="materialUnit" placeholder="原料单位" name="unit">
-							</div>
-						</div>
-						<!-- 原材料库存 -->
-						<div class="form-group">
-							<label for="materialInventory" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">库存：</label>
-							<div class="col-xs-12 col-sm-10 col-md-11">
-								<input type="text" class="form-control" id="materialInventory" placeholder="库存数量" name="inventory">
-							</div>
-						</div>
-						<!-- 原材料分类 -->
-						<div class="form-group">
-							<label for="materialType" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">类别：</label>
-							<div class="col-xs-12 col-sm-10 col-md-11">
-								<input type="hidden" id="materialType" name="type" value="0">
-								<select class="form-control" id="materialTypeSelect" onchange="selectChange();">
-									<option value="0">请选择分类</option>
-									{volist name = 'typeList' id = 'typeList'}
-									<option id="{$typeList.id}" value="{$typeList.id}">{$typeList.name}</option>
-									{/volist}
-								</select>
-							</div>
-						</div>
-						<!-- 原材料生产商 -->
-						<div class="form-group">
-							<label for="materialProducer" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">厂商：</label>
-							<div class="col-xs-12 col-sm-10 col-md-11">
-								<input type="text" class="form-control" id="materialProducer" placeholder="生产商" name="producer">
-							</div>
-						</div>
-						<!-- 保存按钮 -->
-						<div class="form-group">
-							<div class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-1 col-md-11">
-								<button type="submit" class="btn btn-primary btn-sm">保存</button>
-							</div>
-						</div>
+<!-- 页面主体 -->
+<div class="main-container ace-save-state" id="main-container">
+	<script type="text/javascript">
+		try{ace.settings.loadState('main-container')}catch(e){}
+	</script>
+
+	<!-- 引入左侧导航 -->
+	{include file="common/left" /}
+
+	<!-- 页面右侧内容 -->
+	<div class="main-content">
+		<div class="main-content-inner">
+			<!-- 面包屑导航 -->
+			<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+				<ul class="breadcrumb">
+					<li>
+						<i class="ace-icon fa fa-home home-icon"></i>
+						<a href="#">Home</a>
+					</li>
+
+					<li>
+						<a href="#">Other Pages</a>
+					</li>
+					<li class="active">{$title}</li>
+				</ul><!-- /.breadcrumb -->
+
+				<div class="nav-search" id="nav-search">
+					<form class="form-search">
+						<span class="input-icon">
+							<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
+							<i class="ace-icon fa fa-search nav-search-icon"></i>
+						</span>
 					</form>
-				</div>
+				</div><!-- /.nav-search -->
 			</div>
+			
+			<div class="page-content">
+				<!-- 右侧设置模块 -->
+				<div class="ace-settings-container" id="ace-settings-container">
+					<div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
+						<i class="ace-icon fa fa-cog bigger-130"></i>
+					</div>
+
+					<div class="ace-settings-box clearfix" id="ace-settings-box">
+						<div class="pull-left width-50">
+							<div class="ace-settings-item">
+								<div class="pull-left">
+									<select id="skin-colorpicker" class="hide">
+										<option data-skin="no-skin" value="#438EB9">#438EB9</option>
+										<option data-skin="skin-1" value="#222A2D">#222A2D</option>
+										<option data-skin="skin-2" value="#C6487E">#C6487E</option>
+										<option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
+									</select>
+								</div>
+								<span>&nbsp; Choose Skin</span>
+							</div>
+
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-navbar" autocomplete="off" />
+								<label class="lbl" for="ace-settings-navbar"> Fixed Navbar</label>
+							</div>
+
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-sidebar" autocomplete="off" />
+								<label class="lbl" for="ace-settings-sidebar"> Fixed Sidebar</label>
+							</div>
+
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-breadcrumbs" autocomplete="off" />
+								<label class="lbl" for="ace-settings-breadcrumbs"> Fixed Breadcrumbs</label>
+							</div>
+
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" autocomplete="off" />
+								<label class="lbl" for="ace-settings-rtl"> Right To Left (rtl)</label>
+							</div>
+
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2 ace-save-state" id="ace-settings-add-container" autocomplete="off" />
+								<label class="lbl" for="ace-settings-add-container">
+									Inside
+									<b>.container</b>
+								</label>
+							</div>
+						</div><!-- /.pull-left -->
+
+						<div class="pull-left width-50">
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-hover" autocomplete="off" />
+								<label class="lbl" for="ace-settings-hover"> Submenu on Hover</label>
+							</div>
+
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-compact" autocomplete="off" />
+								<label class="lbl" for="ace-settings-compact"> Compact Sidebar</label>
+							</div>
+
+							<div class="ace-settings-item">
+								<input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-highlight" autocomplete="off" />
+								<label class="lbl" for="ace-settings-highlight"> Alt. Active Item</label>
+							</div>
+						</div><!-- /.pull-left -->
+					</div><!-- /.ace-settings-box -->
+				</div><!-- /.ace-settings-container -->
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="bs-callout bs-callout-danger">
+							<h4 class="">{$title}</h4>
+							<p>原料用于制作菜肴，包括蔬菜瓜果类，调味品等</p>
+						</div>
+						<form action="{:url('insertMaterial')}" method="POST" id="addMaterial" class="form-horizontal" role="from">
+							<!-- 原材料名称 -->
+							<div class="form-group">
+								<!-- col-xs-* ：手机、col-sm-* ：平板、col-md-* ：桌面 -->
+								<label for="materialName" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">名称：</label>
+								<div class="col-xs-12 col-sm-10 col-md-11">
+									<input type="text" class="form-control" id="materialName" placeholder="原料名称" name="name">
+								</div>
+							</div>
+							<!-- 原材料价格 -->
+							<div class="form-group">
+								<label for="materialPrice" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">价格：</label>
+								<div class="col-xs-12 col-sm-10 col-md-11">
+									<input type="text" class="form-control" id="materialPrice" placeholder="市场价格" name="price">
+								</div>
+							</div>
+							<!-- 原材料单位 -->
+							<div class="form-group">
+								<label for="materialUnit" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">单位：</label>
+								<div class="col-xs-12 col-sm-10 col-md-11">
+									<input type="text" class="form-control" id="materialUnit" placeholder="原料单位" name="unit">
+								</div>
+							</div>
+							<!-- 原材料库存 -->
+							<div class="form-group">
+								<label for="materialInventory" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">库存：</label>
+								<div class="col-xs-12 col-sm-10 col-md-11">
+									<input type="text" class="form-control" id="materialInventory" placeholder="库存数量" name="inventory">
+								</div>
+							</div>
+							<!-- 原材料分类 -->
+							<div class="form-group">
+								<label for="materialType" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">类别：</label>
+								<div class="col-xs-12 col-sm-10 col-md-11">
+									<input type="hidden" id="materialType" name="type" value="0">
+									<select class="form-control" id="materialTypeSelect" onchange="selectChange();">
+										<option value="0">请选择分类</option>
+										{volist name = 'typeList' id = 'typeList'}
+										<option id="{$typeList.id}" value="{$typeList.id}">{$typeList.name}</option>
+										{/volist}
+									</select>
+								</div>
+							</div>
+							<!-- 原材料生产商 -->
+							<div class="form-group">
+								<label for="materialProducer" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">厂商：</label>
+								<div class="col-xs-12 col-sm-10 col-md-11">
+									<input type="text" class="form-control" id="materialProducer" placeholder="生产商" name="producer">
+								</div>
+							</div>
+							<!-- 保存按钮 -->
+							<div class="form-group">
+								<div class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-1 col-md-11">
+									<button type="submit" class="btn btn-primary btn-sm">保存</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
+			</div><!-- /.page-content -->
+
 		</div>
+
 	</div>
+	{include file='common/foot' /}
+</div>
+<!-- ./ main-container -->
+		<!-- basic scripts -->
+
+		<!--[if !IE]> -->
+		<script src="assets/js/jquery-2.1.4.min.js"></script>
+
+		<!-- <![endif]-->
+
+		<!--[if IE]>
+<script src="assets/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="assets/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!-- ace scripts -->
+		<script src="assets/js/ace-elements.min.js"></script>
+		<script src="assets/js/ace.min.js"></script>
+
+		<!-- inline scripts related to this page -->
 
 	<script>
 		$(function () {
