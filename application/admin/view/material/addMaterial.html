@@ -198,11 +198,14 @@
 
 			function completeAdd(data) {
 
+				console.log('请求完成！');
+
 				if (data.status == 1) {
 
 					layer.msg(data.info, {icon: 1, time: 2000}, function (param) {
 						
 						layer.close(param);
+						window.location.href = data.url;
 
 					});
 

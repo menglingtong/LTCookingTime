@@ -4,28 +4,41 @@
 		
 		<div class="form-list">
 			<div class="row">
-				<!-- <div class="col-md-12">
+				<div class="col-md-12">
 					<div class="bs-callout bs-callout-danger">
 						<h4>{$title}</h4>
 						<p>查看、修改、搜索等操作</p>
 					</div>
-					<form action="{:url('admin/material/insertMaterialType')}" class="form-horizontal" role="from" id="materialType" method="POST"> -->
-						<!-- 原材料名称 -->
-						<!-- <div class="form-group"> -->
-							<!-- col-xs-* ：手机、col-sm-* ：平板、col-md-* ：桌面 -->
-							<!-- <label for="name" class="control-label col-xs-12 col-sm-2 col-md-1 text-left">分类：</label>
-							<div class="col-xs-12 col-sm-10 col-md-11">
-								<input type="text" class="form-control" id="name" name="name" placeholder="原料分类">
-							</div>
-						</div> -->
-						<!-- 保存按钮 -->
-						<!-- <div class="form-group">
-							<div class="col-xs-12 col-sm-offset-2 col-sm-10 col-md-offset-1 col-md-11">
-								<button type="submit" class="btn btn-primary btn-sm" id="submit">保存</button>
-							</div>
+				</div>
+			</div>
+
+			<div class="row mainTop">
+				<div class="col-xs-12 col-sm-6 btn-sespan">
+					<div class="col-xs-12 col-sm-2">
+                        <a href="{:url('addMaterial')}">
+                            <button class="btn btn-xs btn-danger">
+                                <i class="ace-icon fa fa-plus bigger-110"></i>
+                                添加原料
+                            </button>
+                        </a>
+                    </div>
+					<form action="{:url('showMaterialList')}" class="form-search" role="from" id="materialSearch" method="POST">
+						<div class="input-group">
+							<span class="input-group-addon">
+								<i class="ace-icon fa fa-search"></i>
+							</span>
+							<input type="text" name="searchName" id="searchName" class="form-control search-query admin_sea" value="" placeholder="请输入原料名称"/>
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-xs btm-input btn-purple">
+                                    搜索
+                                </button>
+                            </span>
 						</div>
 					</form>
-				</div> -->
+				</div>
+			</div>
+		
+			<div class="row">
 				<div class="col-md-12">
 					<table class="table table-striped table-bordered table-hover center">
 						<tr>
@@ -75,7 +88,7 @@
 							<td colspan="10">&nbsp;</td>
 						</tr>
 					</table>
-					{$list->render()}
+					
 				</div>
 			</div>
 		</div>

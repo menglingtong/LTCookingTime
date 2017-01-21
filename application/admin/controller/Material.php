@@ -34,7 +34,7 @@ class Material extends Controller
 		$this->assign('typeList', $typeList);
 
 		$this->view->replace([
-			'__PUBLIC__' => '/tp5/public'
+			'__PUBLIC__' => '/LTCookingTime/public'
 		]);
 		
 		return $this->fetch();
@@ -231,23 +231,49 @@ class Material extends Controller
 	 */
 	public function showMaterialList($value='')
 	{
-		$materialList = MaterialModel::paginate(8);
 
-		$typeList = MaterialTypeModel::all(['is_del' => 0]);
+		$searchName = input('post.searchName');
 
-		$this->assign('list', $materialList);
+		if (isset($searchName)) {
 
-		$this->assign('typeList', $typeList);
+			$typeList = MaterialTypeModel::all(['is_del' => 0]);
 
-		$title = '原料列表';
+			$this->assign('typeList', $typeList);
+			
+			$materialList = MaterialModel::where('name', 'like', $searchName)->select();
 
-		$this->assign('title', $title);
+			$this->assign('list', $materialList);
 
-		$this->view->replace([
-			'__PUBLIC__' => '/tp5/public',
-		]);
+			$title = '原料列表';
 
-		return $this->fetch();
+			$this->assign('title', $title);
+
+			$this->view->replace([
+				'__PUBLIC__' => '/LTCookingTime/public',
+			]);
+
+			return $this->fetch();
+
+		} else {
+			$materialList = MaterialModel::all();
+
+			$typeList = MaterialTypeModel::all(['is_del' => 0]);
+
+			$this->assign('list', $materialList);
+
+			$this->assign('typeList', $typeList);
+
+			$title = '原料列表';
+
+			$this->assign('title', $title);
+
+			$this->view->replace([
+				'__PUBLIC__' => '/LTCookingTime/public',
+			]);
+
+			return $this->fetch();
+		}
+
 	}
 
 	/****************** 原料分类 ****************/
@@ -267,7 +293,7 @@ class Material extends Controller
 		$this->assign('title', $title);
 
 		$this->view->replace([
-			'__PUBLIC__' => '/tp5/public',
+			'__PUBLIC__' => '/LTCookingTime/public',
 		]);
 
 		return $this->fetch();
