@@ -18,6 +18,17 @@ class Material extends Controller
 		# TP使用构造函数，必须这么写
 		parent::__construct();
 	}
+
+	public function mobelMaterialList()
+	{
+		$list = MaterialModel::all(['is_del' => 0]);
+
+		// return json_encode($list, JSON_UNESCAPED_UNICODE);
+		
+		$value = $_POST['key'];
+		
+		return $value;
+	}
 	
 	/**************** 原料 ****************/
 	/**
